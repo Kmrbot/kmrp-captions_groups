@@ -1,11 +1,13 @@
 from nonebot import on_notice
+
+from database.db_manager import DBManager
 from protocol_adapter.protocol_adapter import ProtocolAdapter
 from protocol_adapter.adapter_type import AdapterGroupIncreaseNoticeEvent
 from ..database.captions_groups import DBPluginsCaptionsGroupsInfo
 from utils.rule import group_only
 from utils.permission import white_list_handle
 
-group_increase_handler = on_notice(priority=5, rule=group_only)
+group_increase_handler = on_notice(priority=5, rule=group_only())
 group_increase_handler.handle(white_list_handle("captions_groups"))
 
 
@@ -15,6 +17,11 @@ async def _(event: AdapterGroupIncreaseNoticeEvent):
     msg_type = ProtocolAdapter.get_msg_type(event)
     msg_type_id = ProtocolAdapter.get_msg_type_id(event)
     user_id = ProtocolAdapter.get_user_id(event)
+
+    # 如果是自己的话要忽略
+    if user_id == DBManager.get_bot_id():
+        await group_increase_handler.finish()
+
     welcome_content = DBPluginsCaptionsGroupsInfo.get_group_welcome_content_by_msg_type_id(msg_type, msg_type_id)
     if not welcome_content:
         await group_increase_handler.finish()

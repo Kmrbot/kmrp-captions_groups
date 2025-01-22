@@ -4,7 +4,7 @@ from protocol_adapter.adapter_type import AdapterBot, AdapterGroupBanNoticeEvent
 from utils.rule import group_only
 from utils.permission import white_list_handle
 
-group_ban_handler = on_notice(priority=5, rule=group_only)
+group_ban_handler = on_notice(priority=5, rule=group_only())
 group_ban_handler.handle(white_list_handle("captions_groups"))
 
 
