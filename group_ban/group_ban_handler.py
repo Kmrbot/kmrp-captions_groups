@@ -11,7 +11,7 @@ group_ban_handler.handle(white_list_handle("captions_groups"))
 @group_ban_handler.handle()
 async def _(bot: AdapterBot, event: AdapterGroupBanNoticeEvent):
     """群禁言/解禁Handler"""
-    ban_info = await ProtocolAdapter.Ban.get_ban_info(bot, event)
+    ban_info = await ProtocolAdapter.Group.get_ban_info(bot, event)
     if ban_info["is_ban"]:
         ret_str = f"{ban_info['ban_user_name']}（{ban_info['ban_user_id']}）被" \
                   f"{ban_info['operator_user_name']}（{ban_info['operator_user_id']}）" \
